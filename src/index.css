@@ -1,0 +1,36 @@
+/* Import fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@700&family=Roboto:wght@400;500&display=swap');
+
+/* Global font settings */
+body {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  background-color: #0F172A; /* dark mode default, change if light mode */
+  color: #FFFFFF; /* default text color for dark background */
+  margin: 0;
+  padding: 0;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700; /* Bold */
+}
+
+:root {
+  --color-primary: #1E3A8A;  /* deep blue */
+  --color-accent: #38BDF8;   /* sky blue */
+  --color-secondary: #FACC15; /* Krishna yellow */
+  --color-bg-dark: #0F172A;
+  --color-bg-light: #FFFFFF;
+  --color-text-light: #FFFFFF;
+  --color-text-dark: #0F172A;
+}
+
+
+.rounded-lg {
+  border-radius: 20px;
+}
+
+.shadow-soft {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
