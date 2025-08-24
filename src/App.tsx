@@ -6,7 +6,7 @@ import Experience from "./pages/Experience";
 import Stars from "./components/Stars";
 import ProjectsPage from "./pages/ProjectsPage";
 import ContactPage from "./pages/ContactPage";
-import CodeDharmaPage from "./pages/CodeDharma";
+// import CodeDharmaPage from "./pages/CodeDharma";
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
         <Route path="/experience" element={<Experience />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/code-dharma" element={<CodeDharmaPage />} />
+        {/* <Route path="/code-dharma" element={<CodeDharmaPage />} /> */}
       </Routes>
     </BrowserRouter>
   );

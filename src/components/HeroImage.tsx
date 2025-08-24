@@ -1,6 +1,8 @@
 // src/components/HeroImage.tsx
-import { Box, SxProps, Theme } from "@mui/material";
-import { motion, Variants } from "framer-motion";
+import { Box,  } from "@mui/material";
+import type {SxProps, Theme} from "@mui/material"
+import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import { floatImage } from "../utils/animations";
 import Hari from "../assets/Hari's-photo.jpeg";
 
