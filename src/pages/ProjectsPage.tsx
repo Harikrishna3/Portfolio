@@ -53,7 +53,7 @@ const projectData = [
       Impact:
         "A live, professional portfolio that highlights my skills, projects, and attracts potential employers.",
     },
-    // demoLink: "https://harikrishna-portfolio.netlify.app/",
+    demoLink: "https://harikrishna3portfolio.vercel.app/",
     githubLink: "https://github.com/Harikrishna3/Portfolio",
     category: "Portfolio",
     year: "2025",

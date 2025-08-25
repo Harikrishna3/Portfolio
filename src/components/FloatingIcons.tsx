@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import LeetCodeIcon from "../assets/leetcode-icon.svg";
 import JSIcon from "../assets/JS.svg";
@@ -40,6 +40,9 @@ export default function FloatingIcons() {
   const [positions, setPositions] = useState(
     icons.map(() => randomCornerPosition())
   );
+  
+  // Use useRef to store timeout IDs
+  const timeoutIds: any = useRef([]);
 
   // Animate each icon recursively
   const animateIcon = (index: number) => {
@@ -49,12 +52,30 @@ export default function FloatingIcons() {
     );
 
     // Random duration for natural roaming
-    const duration = 15 + Math.random() * 10; // 15-25 seconds
-    setTimeout(() => animateIcon(index), duration * 1000);
+    const duration = 5; // 15-25 seconds
+    const timeoutId = setTimeout(() => animateIcon(index), duration * 1000);
+    
+    // Store the timeout ID
+    timeoutIds.current[index] = timeoutId;
   };
 
   useEffect(() => {
+    // Initialize timeout array
+    timeoutIds.current = new Array(icons.length);
+    
+    // Start animations for all icons
     icons.forEach((_, i) => animateIcon(i));
+
+    // Cleanup function - clear all timeouts on unmount
+    return () => {
+      setPositions(icons.map(() => randomCornerPosition()));
+      timeoutIds.current.forEach((timeoutId: any) => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+      });
+      timeoutIds.current = [];
+    };
   }, []);
 
   return (
