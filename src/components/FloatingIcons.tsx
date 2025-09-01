@@ -86,8 +86,8 @@ export default function FloatingIcons() {
           src={icon}
           alt="icon"
            style={{
-            width: 50,
-            height: 50,
+            width: 60,
+            height: 60,
             position: "absolute",
             top: positions[i].y,
             left: positions[i].x,

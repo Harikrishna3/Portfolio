@@ -20,63 +20,9 @@ import CodeIcon from "@mui/icons-material/Code";
 import BoltIcon from "@mui/icons-material/Bolt";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TargetIcon from "@mui/icons-material/GpsFixed";
+import { projectData } from "../utils/constants";
 
-const projectData = [
-  {
-    title: "ShopEasy - React E-Commerce",
-    description:
-      "A modern and user-friendly online shopping platform that enhances shopping experience and analytics tracking.",
-    details: {
-      Problem: "Many online stores are slow and confusing, frustrating users.",
-      Solution:
-        "Developed a React-based platform with lazy loading, smooth navigation, and integrated Google Analytics for tracking user behavior.",
-      Tech: "React, Redux, JavaScript, HTML/CSS",
-      Impact:
-        "Users experienced faster load times, smoother navigation, and better engagement due to analytics insights.",
-    },
-    demoLink: "https://shopeasy-react.netlify.app/",
-    githubLink: "https://github.com/Harikrishna3/ShopEasy-React",
-    category: "E-Commerce",
-    year: "2024",
-  },
-  ,
-  {
-    title: "My Portfolio Website",
-    description:
-      "A personal portfolio to showcase my projects, skills, and achievements with interactive UI and background animations.",
-    details: {
-      Problem:
-        "I needed a professional way to present my work and experience online.",
-      Solution:
-        "Built a responsive React-based portfolio with dynamic project display, animated background, and interactive elements.",
-      Tech: "React, JavaScript, CSS, Framer Motion, HTML",
-      Impact:
-        "A live, professional portfolio that highlights my skills, projects, and attracts potential employers.",
-    },
-    demoLink: "https://harikrishna3portfolio.vercel.app/",
-    githubLink: "https://github.com/Harikrishna3/Portfolio",
-    category: "Portfolio",
-    year: "2025",
-  },
-  {
-    title: "Video Chat Application",
-    description:
-      "A real-time peer-to-peer video chat app built for seamless communication directly in the browser.",
-    details: {
-      Problem:
-        "Existing solutions had unreliable connections and complex setup.",
-      Solution:
-        "Implemented WebRTC with signaling servers for stable video/audio streaming and easy connection setup.",
-      Tech: "WebRTC, JavaScript, HTML/CSS",
-      Impact:
-        "Reliable video calling in-browser, low latency, and easy to use for multiple users.",
-    },
-    // demoLink: "https://demo.videochatapp.com",
-    // githubLink: "https://github.com/username/videochatapp",
-    category: "Communication",
-    year: "2024",
-  },
-];
+
 
 type DetailItemProps = {
   icon: React.ReactNode;
@@ -496,6 +442,19 @@ const ProjectsPage = () => {
               >
                 Get In Touch
               </Button>
+               <Typography
+              // variant="h5"
+              sx={{
+                color: "#E2E8F0",
+                maxWidth: "600px",
+                mx: "auto",
+                mt: 6,
+                lineHeight: 1.6,
+                fontSize: "0.9rem"
+              }}
+            >
+              Along with creating projects, I document and share my journey through blogs on  <span onClick={()=>{window.open("https://medium.com/@harikrishnabbomen","_blank")}} style={{ color: "#F59E0B", textDecoration: "underline Dotted", cursor: "pointer" }}>Medium &#8599;</span>
+            </Typography>
             </Paper>
           </Box>
         </Fade>

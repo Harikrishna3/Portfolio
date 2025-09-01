@@ -14,6 +14,7 @@ import {
   DialogActions,
   IconButton,
 } from "@mui/material";
+import BookIcon from '@mui/icons-material/Book';
 import { Email, LinkedIn, GitHub } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import { motion } from "framer-motion";
@@ -30,7 +31,8 @@ const ContactPage = () => {
   
   const [command, setCommand] = useState("");
   const [placeholder, setPlaceholder] = useState("");
- // Use refs to avoid stale closures and reduce re-renders
+  
+
   const animationStateRef = useRef({
     commandIndex: 0,
     charIndex: 0,
@@ -38,11 +40,10 @@ const ContactPage = () => {
     isAnimating: true
   });
   
-  const timerRef: any = useRef(null);
+  const timerRef : any = useRef(null);
 
-  // Memoized animation step function
+
   const animateTyping = useCallback(() => {
-    // Stop animation if user is typing
     if (command.length > 0) {
       animationStateRef.current.isAnimating = false;
       return;
@@ -108,7 +109,6 @@ const ContactPage = () => {
     }
   }, [command.length, animateTyping]);
 
-  // Handle Commands
   const handleCommand = (e: React.KeyboardEvent) => {
     if (e.key !== "Enter") return;
 
@@ -138,9 +138,44 @@ const ContactPage = () => {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", position: "relative", overflow: "hidden", color: "white" }}>
+    <Box 
+      sx={{ 
+        minHeight: "100vh", 
+        position: "relative", 
+        overflow: "hidden", 
+        color: "white",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column"
+      }}
+    >
       {/* World Map Background */}
-      <Box sx={{ position: "absolute", filter: "drop-shadow(0 0 20px rgba(59, 130, 246, 0.3))" }}>
+      <Box 
+        sx={{ 
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          filter: "drop-shadow(0 0 20px rgba(59, 130, 246, 0.3))",
+          zIndex: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          "& img": {
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: { 
+              xs: 0.25,        
+              sm: 0.3,         
+              md: 0.35,        
+              lg: 0.4,         
+              xl: 0.45         
+            }, 
+          }
+        }}
+      >
         <img src={BlackMap} alt="World Map" />
       </Box>
 
@@ -150,27 +185,55 @@ const ContactPage = () => {
         sx={{
           position: "relative",
           zIndex: 50,
-          height: "100vh",
+          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           textAlign: "center",
+          px: { 
+            xs: 1.5,         
+            sm: 2,           
+            md: 2.5,         
+            lg: 3,           
+            xl: 4            
+          }, 
+          py: { 
+            xs: 3,           
+            sm: 4,           
+            md: 5,           
+            lg: 6,           
+            xl: 8            
+          }, 
         }}
       >
         {/* Header */}
-        <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, delay: 0.5 }}>
+        <motion.div 
+          initial={{ y: 50, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          transition={{ duration: 1, delay: 0.5 }}
+        >
           <Typography
             variant="h1"
             sx={{
-              fontSize: { xs: "2.5rem", md: "4rem" },
+              fontSize: { 
+                xs: "1.75rem",   
+                sm: "2.25rem",   
+                md: "3.25rem",   
+                lg: "4rem",      
+                xl: "4.75rem"    
+              },
               fontWeight: 800,
-              mb: 2,
+              mb: { xs: 1, sm: 1.5, md: 2 },
               background: "linear-gradient(135deg, #facc15, #f59e0b)",
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
               color: theme.palette.secondary.main,
               textShadow: "0 0 40px rgba(250, 204, 21, 0.3)",
+              lineHeight: { xs: 1.2, sm: 1.15, md: 1.1, lg: 1.05, xl: 1 },
+              // Better text wrapping on small screens
+              wordBreak: "break-word",
+              hyphens: "auto",
             }}
           >
             Let's Build Together{" "}
@@ -185,56 +248,154 @@ const ContactPage = () => {
         </motion.div>
 
         {/* Subheader */}
-        <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, delay: 0.7 }}>
-          <Typography variant="h6" sx={{ color: alpha("#fff", 0.8), mb: 4, maxWidth: 600, fontSize: { xs: "1rem", md: "1.2rem" } }}>
+        <motion.div 
+          initial={{ y: 30, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          transition={{ duration: 1, delay: 0.7 }}
+        >
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              color: alpha("#fff", 0.8), 
+              mb: { xs: 2.5, sm: 3, md: 3.5, lg: 4, xl: 4.5 }, 
+              maxWidth: { xs: "100%", sm: 500, md: 600, lg: 700, xl: 800 }, 
+              fontSize: { 
+                xs: "0.875rem",  
+                sm: "1rem",      
+                md: "1.125rem",  
+                lg: "1.25rem",   
+                xl: "1.375rem"   
+              },
+              px: { xs: 1, sm: 2, md: 0 },
+              lineHeight: { xs: 1.4, sm: 1.45, md: 1.5, lg: 1.55, xl: 1.6 },
+            }}
+          >
             I'm open to opportunities, collaborations, and exciting projects. Let's connect!
           </Typography>
         </motion.div>
 
         {/* Buttons */}
-        <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, delay: 0.9 }}>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mb: 4 }}>
+        <motion.div 
+          initial={{ y: 30, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          transition={{ duration: 1, delay: 0.9 }}
+        >
+          <Stack 
+            direction={{ xs: "column", sm: "column", md: "row" }} 
+            spacing={{ xs: 1.5, sm: 2, md: 2.5, lg: 3, xl: 3.5 }} 
+            sx={{ 
+              mb: { xs: 2.5, sm: 3, md: 3.5, lg: 4, xl: 4.5 },
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
             {[
               {
                 label: "Email",
                 icon: <Email />,
-                variant: "contained",
+                variant: "contained" as "contained",
                 href: "mailto:harikrishnabbomen@gmail.com",
                 sx: {
                   background: "#3b82f6",
-                  "&:hover": { background: "#2563eb", transform: "translateY(-2px)", boxShadow: "0 10px 25px rgba(59, 130, 246, 0.4)" },
+                  "&:hover": { 
+                    background: "#2563eb", 
+                    transform: "translateY(-2px)", 
+                    boxShadow: "0 10px 25px rgba(59, 130, 246, 0.4)" 
+                  },
                 },
               },
               {
                 label: "LinkedIn",
                 icon: <LinkedIn />,
-                variant: "outlined",
+                variant: "outlined" as "outlined",
                 href: "https://www.linkedin.com/in/harikrishnabomen/",
                 sx: {
                   borderColor: "#facc15",
                   color: "#facc15",
-                  "&:hover": { background: "#facc15", color: "#0f172a", transform: "translateY(-2px)", boxShadow: "0 10px 25px rgba(250, 204, 21, 0.4)" },
+                  "&:hover": { 
+                    background: "#facc15", 
+                    color: "#0f172a", 
+                    transform: "translateY(-2px)", 
+                    boxShadow: "0 10px 25px rgba(250, 204, 21, 0.4)" 
+                  },
                 },
               },
               {
                 label: "GitHub",
                 icon: <GitHub />,
-                variant: "outlined",
+                variant: "outlined" as "outlined",
                 href: "https://github.com/Harikrishna3",
                 sx: {
                   borderColor: "#facc15",
                   color: "#facc15",
-                  "&:hover": { background: "#facc15", color: "#0f172a", transform: "translateY(-2px)", boxShadow: "0 10px 25px rgba(250, 204, 21, 0.4)" },
+                  "&:hover": { 
+                    background: "#facc15", 
+                    color: "#0f172a", 
+                    transform: "translateY(-2px)", 
+                    boxShadow: "0 10px 25px rgba(250, 204, 21, 0.4)" 
+                  },
+                },
+              },
+              {
+                label: "Medium",
+                icon: <BookIcon />,
+                variant: "outlined" as "outlined",
+                href: "https://medium.com/@harikrishnabbomen",
+                sx: {
+                  borderColor: "#facc15",
+                  color: "#facc15",
+                  "&:hover": { 
+                    background: "#facc15", 
+                    color: "#0f172a", 
+                    transform: "translateY(-2px)", 
+                    boxShadow: "0 10px 25px rgba(250, 204, 21, 0.4)" 
+                  },
                 },
               },
             ].map((btn) => (
               <Button
                 key={btn.label}
-                variant={btn.variant as any}
+                variant={btn.variant}
                 startIcon={btn.icon}
                 href={btn.href}
                 target="_blank"
-                sx={{ px: 4, py: 1.5, borderRadius: "25px", fontWeight: 600, transition: "all 0.3s ease", ...btn.sx }}
+                sx={{ 
+                  px: { xs: 2.5, sm: 3, md: 3.5, lg: 4, xl: 4.5 }, 
+                  py: { xs: 1, sm: 1.2, md: 1.4, lg: 1.5, xl: 1.6 }, 
+                  borderRadius: "25px", 
+                  fontWeight: 600, 
+                  transition: "all 0.3s ease",
+                  fontSize: { 
+                    xs: "0.8rem",    
+                    sm: "0.85rem",   
+                    md: "0.9rem",    
+                    lg: "0.95rem",   
+                    xl: "1rem"       
+                  },
+                  minWidth: { 
+                    xs: "120px",     
+                    sm: "140px",     
+                    md: "auto",      
+                    lg: "auto",      
+                    xl: "auto"       
+                  }, 
+                  width: { 
+                    xs: "100%",      
+                    sm: "100%",      
+                    md: "auto",      
+                    lg: "auto",      
+                    xl: "auto"       
+                  }, 
+                  maxWidth: { 
+                    xs: "180px",     
+                    sm: "200px",     
+                    md: "none",      
+                    lg: "none",      
+                    xl: "none"       
+                  }, 
+                  ...btn.sx 
+                }}
               >
                 {btn.label}
               </Button>
@@ -243,9 +404,56 @@ const ContactPage = () => {
         </motion.div>
 
         {/* Command Input */}
-        <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, delay: 1.1 }}>
-          <Box sx={{ background: alpha("#0f172a", 0.9), border: "2px solid #334155", borderRadius: 3, p: 3, width: { xs: "90vw", sm: "400px" }, maxWidth: "400px", backdropFilter: "blur(10px)" }}>
-            <Typography variant="body2" sx={{ color: "#facc15", mb: 1, fontFamily: '"Courier New", monospace' }}>
+        <motion.div 
+          initial={{ y: 30, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          transition={{ duration: 1, delay: 1.1 }}
+        >
+          <Box 
+            sx={{ 
+              background: alpha("#0f172a", 0.9), 
+              border: "2px solid #334155", 
+              borderRadius: 3, 
+              p: { 
+                xs: 1.5,         
+                sm: 2,           
+                md: 2.5,         
+                lg: 3,           
+                xl: 3.5          
+              }, 
+              width: { 
+                xs: "95vw",      
+                sm: "85vw",      
+                md: "70vw",      
+                lg: "400px",     
+                xl: "450px"      
+              }, 
+              maxWidth: { 
+                xs: "300px",     
+                sm: "350px",     
+                md: "400px",     
+                lg: "400px",     
+                xl: "450px"      
+              }, 
+              backdropFilter: "blur(10px)",
+              mx: "auto"
+            }}
+          >
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                color: "#facc15", 
+                mb: 1, 
+                fontFamily: '"Courier New", monospace',
+                fontSize: { 
+                  xs: "0.7rem",    
+                  sm: "0.75rem",   
+                  md: "0.8rem",    
+                  lg: "0.875rem",  
+                  xl: "0.9rem"     
+                }
+              }}
+            >
               $ Type command here:
             </Typography>
             <TextField
@@ -260,11 +468,24 @@ const ContactPage = () => {
                   background: "#1e293b",
                   color: "white",
                   fontFamily: '"Courier New", monospace',
+                  fontSize: { 
+                    xs: "0.8rem",    
+                    sm: "0.85rem",   
+                    md: "0.9rem",    
+                    lg: "0.95rem",   
+                    xl: "1rem"       
+                  },
                   "& .MuiFilledInput-underline:before": { display: "none" },
                   "& .MuiFilledInput-underline:after": { display: "none" },
                 },
               }}
-              inputProps={{ style: { color: "white", fontFamily: '"Courier New", monospace' } }}
+              inputProps={{ 
+                style: { 
+                  color: "white", 
+                  fontFamily: '"Courier New", monospace',
+                  fontSize: "inherit"
+                } 
+              }}
             />
           </Box>
         </motion.div>
@@ -275,22 +496,132 @@ const ContactPage = () => {
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         PaperProps={{
-          sx: { background: "linear-gradient(135deg, #0f172a, #1e293b)", color: "#FFFFFF", borderRadius: 3, p: 2, minWidth: { xs: "80vw", sm: "400px" } },
+          sx: { 
+            background: "linear-gradient(135deg, #0f172a, #1e293b)", 
+            color: "#FFFFFF", 
+            borderRadius: 3, 
+            p: { 
+              xs: 1.5,         
+              sm: 2,           
+              md: 2.5,         
+              lg: 2.5,         
+              xl: 3            
+            }, 
+            minWidth: { 
+              xs: "85vw",      
+              sm: "75vw",      
+              md: "400px",     
+              lg: "450px",     
+              xl: "500px"      
+            },
+            maxWidth: { 
+              xs: "90vw",      
+              sm: "80vw",      
+              md: "500px",     
+              lg: "600px",     
+              xl: "700px"      
+            },
+            mx: { xs: 2, sm: 2, md: 0 },
+          },
         }}
+        fullWidth
+        maxWidth="sm"
       >
-        <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Typography variant="h6">Command Error</Typography>
-          <IconButton onClick={() => setOpenDialog(false)} sx={{ color: "#facc15" }}>
-            <CloseIcon />
+        <DialogTitle 
+          sx={{ 
+            display: "flex", 
+            justifyContent: "space-between", 
+            alignItems: "center",
+            pb: 1,
+            fontSize: { 
+              xs: "1rem",      
+              sm: "1.1rem",    
+              md: "1.2rem",    
+              lg: "1.25rem",   
+              xl: "1.3rem"     
+            }
+          }}
+        >
+          <Typography variant="h6" sx={{ fontSize: "inherit" }}>
+            Command Error
+          </Typography>
+          <IconButton 
+            onClick={() => setOpenDialog(false)} 
+            sx={{ 
+              color: "#facc15",
+              p: { 
+                xs: 0.5,         
+                sm: 0.75,        
+                md: 1,           
+                lg: 1,           
+                xl: 1.2          
+              }
+            }}
+          >
+            <CloseIcon 
+              fontSize={
+                window.innerWidth < 600 ? "small" :
+                window.innerWidth < 900 ? "medium" :
+                window.innerWidth < 1200 ? "medium" :
+                window.innerWidth < 1536 ? "medium" : "large"
+              } 
+            />
           </IconButton>
         </DialogTitle>
-        <DialogContent>
-          <Typography sx={{ fontFamily: '"Courier New", monospace', fontSize: "1rem" }}>{dialogContent}</Typography>
+        <DialogContent sx={{ pt: 1 }}>
+          <Typography 
+            sx={{ 
+              fontFamily: '"Courier New", monospace', 
+              fontSize: { 
+                xs: "0.8rem",    
+                sm: "0.85rem",   
+                md: "0.9rem",    
+                lg: "0.95rem",   
+                xl: "1rem"       
+              },
+              lineHeight: { 
+                xs: 1.4,         
+                sm: 1.45,        
+                md: 1.5,         
+                lg: 1.5,         
+                xl: 1.55         
+              },
+              wordBreak: "break-word"
+            }}
+          >
+            {dialogContent}
+          </Typography>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ pt: 2 }}>
           <Button
             onClick={() => setOpenDialog(false)}
-            sx={{ background: "#facc15", color: "#0f172a", fontWeight: 600, "&:hover": { background: "#f59e0b" } }}
+            sx={{ 
+              background: "#facc15", 
+              color: "#0f172a", 
+              fontWeight: 600, 
+              px: { 
+                xs: 2,           
+                sm: 2.5,         
+                md: 3,           
+                lg: 3,           
+                xl: 3.5          
+              },
+              py: { 
+                xs: 0.75,        
+                sm: 0.85,        
+                md: 1,           
+                lg: 1,           
+                xl: 1.1          
+              },
+              fontSize: { 
+                xs: "0.8rem",    
+                sm: "0.85rem",   
+                md: "0.9rem",    
+                lg: "0.95rem",   
+                xl: "1rem"       
+              },
+              "&:hover": { background: "#f59e0b" } 
+            }}
           >
             OK
           </Button>
