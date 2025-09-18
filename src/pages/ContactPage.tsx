@@ -166,13 +166,13 @@ const ContactPage = () => {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            opacity: { 
-              xs: 0.25,        
-              sm: 0.3,         
-              md: 0.35,        
-              lg: 0.4,         
-              xl: 0.45         
-            }, 
+            // opacity: { 
+            //   xs: 0.25,        
+            //   sm: 0.3,         
+            //   md: 0.35,        
+            //   lg: 0.4,         
+            //   xl: 0.45         
+            // }, 
           }
         }}
       >

@@ -254,6 +254,7 @@ const ExperienceDashboard = () => {
           right: { xs: 10, sm: 20, md: 40 }, 
           width: { xs: 150, sm: 250, md: 300, lg: 400 }, 
           animation: "spin 8s linear infinite",
+          opacity: 0.7,
           zIndex: 0,
           "@keyframes spin": {
             "0%": { transform: "rotate(0deg)" },
@@ -271,9 +272,10 @@ const ExperienceDashboard = () => {
           right: { xs: 10, sm: 20, md: 40 }, 
           width: { xs: 150, sm: 250, md: 300, lg: 400 }, 
           transform: "rotate(30deg)",
+          opacity: 0.7,
           zIndex: 0
         }}
-      />
+        />
       <Box 
         component="img" 
         src={typescript} 
@@ -283,9 +285,10 @@ const ExperienceDashboard = () => {
           right: { xs: 10, sm: 20, md: 40 }, 
           width: { xs: 110, sm: 210, md: 260, lg: 360 }, 
           transform: "rotate(-40deg)",
+          opacity: 0.7,
           zIndex: 0
         }}
-      />
+        />
       
       <Box 
         component="img" 
@@ -296,6 +299,7 @@ const ExperienceDashboard = () => {
           left: { xs: 10, sm: 20, md: 40 }, 
           width: { xs: 180, sm: 220, md: 250 },
           transform: "rotate(-40deg)",
+          opacity: 0.7,
           zIndex: 0
         }}
       />
@@ -308,6 +312,7 @@ const ExperienceDashboard = () => {
           left: { xs: 10, sm: 20, md: 40 }, 
           width: { xs: 180, sm: 220, md: 250 },
           transform: "rotate(-10deg)",
+          opacity: 0.7,
           zIndex: 0
         }}
       />

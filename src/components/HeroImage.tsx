@@ -3,7 +3,7 @@ import type { SxProps, Theme } from "@mui/material";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { floatImage } from "../utils/animations";
-import Hari from "../assets/Hari's-photo.jpeg";
+import Hari from "../assets/Hari's-Photo.png";
 
 const MotionImg = motion.img;
 

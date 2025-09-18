@@ -13,12 +13,12 @@ export default function HeroText() {
   const boxSx: SxProps<Theme> = {
     display: "flex",
     flexDirection: "column",
-    gap: { xs: 2, sm: 2.5, md: 3 }, 
+    gap: { xs: 2, sm: 2.5, md: 3 },
     alignItems: { xs: "center", md: "flex-start" },
     textAlign: { xs: "center", md: "left" },
     py: { xs: 1, sm: 2, md: 0 },
     width: "100%",
-    maxWidth: { xs: "100%", sm: "90%", md: "none" }, 
+    maxWidth: { xs: "100%", sm: "90%", md: "none" },
   };
 
   const typographyH1Sx: SxProps<Theme> = {
@@ -28,7 +28,7 @@ export default function HeroText() {
       sm: "2.5rem",
       md: "3rem",
       lg: "3.5rem",
-      xl: "4rem", 
+      xl: "4rem",
     },
     wordBreak: "break-word",
   };
@@ -46,22 +46,22 @@ export default function HeroText() {
   const typographyH5Sx: SxProps<Theme> = {
     lineHeight: 1.4,
     fontSize: {
-      xs: "0.875rem", 
+      xs: "0.875rem",
       sm: "1rem",
-      md: "1.125rem", 
-      lg: "1.25rem", 
-      xl: "1.375rem", 
+      md: "1.125rem",
+      lg: "1.25rem",
+      xl: "1.375rem",
     },
-    maxWidth: { xs: "100%", sm: "80%", md: "none" }, 
+    maxWidth: { xs: "100%", sm: "80%", md: "none" },
   };
   const typographyH6Sx: SxProps<Theme> = {
     lineHeight: 1.4,
     fontSize: {
       xs: "0.475rem",
-      sm: "0.65rem", 
-      md: "0.9rem", 
-      lg: "0.95rem", 
-      xl: "1.075rem", 
+      sm: "0.65rem",
+      md: "0.9rem",
+      lg: "0.95rem",
+      xl: "1.075rem",
     },
     maxWidth: { xs: "100%", sm: "80%", md: "none" },
   };
@@ -77,11 +77,11 @@ export default function HeroText() {
   };
 
   const buttonSx: SxProps<Theme> = {
-    minHeight: { xs: 44, sm: 48 }, 
+    minHeight: { xs: 44, sm: 48 },
     fontSize: { xs: "0.875rem", sm: "1rem" },
     px: { xs: 2, sm: 3 },
-    width: { xs: "100%", sm: "auto" }, 
-    maxWidth: { xs: "280px", sm: "none" }, 
+    width: { xs: "100%", sm: "auto" },
+    maxWidth: { xs: "280px", sm: "none" },
   };
 
   return (
@@ -91,14 +91,30 @@ export default function HeroText() {
         initial="hidden"
         animate="visible"
         variants={textVariant as Variants}
-        whileHover={{ scale: 1.02 }} 
+        whileHover={{ scale: 1.02 }}
       >
         <Typography variant="h1" color="text.secondary" sx={typographyH1Sx}>
           <Box component="span" sx={greetingTextSx}>
             Hi, I'm
           </Box>
           <br />
-          Harikrishna 👋
+          Harikrishna
+          <MotionDiv
+            animate={{
+              rotate: [0, 5, -5, 5, 0], 
+              transition: {
+                duration: 1.5, // full wave duration
+                repeat: Infinity,
+                ease: "easeInOut",
+              },
+            }}
+            style={{
+              display: "inline-block",
+              transformOrigin: "bottom center",
+            }} // rotate like wrist
+          >
+            👋
+          </MotionDiv>
         </Typography>
       </MotionDiv>
 
@@ -113,7 +129,19 @@ export default function HeroText() {
         </Typography>
         {/* <br/> */}
         <Typography color="text.secondary" sx={typographyH6Sx}>
-          I also share my learnings on  <span onClick={()=>{window.open("https://medium.com/@harikrishnabbomen","_blank")}} style={{ color: "#F59E0B", textDecoration: "underline Dotted", cursor: "pointer" }}>Medium &#8599;</span>
+          I also share my learnings on{" "}
+          <span
+            onClick={() => {
+              window.open("https://medium.com/@harikrishnabbomen", "_blank");
+            }}
+            style={{
+              color: "#F59E0B",
+              textDecoration: "underline Dotted",
+              cursor: "pointer",
+            }}
+          >
+            Medium &#8599;
+          </span>
         </Typography>
       </MotionDiv>
 
