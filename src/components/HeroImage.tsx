@@ -39,11 +39,6 @@ export default function HeroImage() {
     aspectRatio: "1",
     objectFit: "cover",
     borderRadius: "50%",
-    boxShadow: "0px 8px 25px rgba(0,0,0,0.15)",
-    transition: "all 0.3s ease-in-out",
-    "&:hover": {
-      boxShadow: "0px 15px 35px rgba(0,0,0,0.25)",
-    },
   };
 
   return (

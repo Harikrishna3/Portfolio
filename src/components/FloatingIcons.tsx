@@ -92,7 +92,7 @@ export default function FloatingIcons() {
             top: positions[i].y,
             left: positions[i].x,
             pointerEvents: "none",
-            filter: "drop-shadow(0 0 0px #38BDF8) drop-shadow(0 0 1.5px #38BDF8)",
+            // filter: "drop-shadow(0 0 0px #38BDF8) drop-shadow(0 0 1.5px #38BDF8)",
             zIndex: 0,
           }}
           animate={{

@@ -33,6 +33,12 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  cursor: none; /* Hide default cursor */
+}
+
+/* Ensure interactive elements still show something or use our custom logic */
+a, button, [role="button"] {
+  cursor: none;
 }
 
 /* Headings */

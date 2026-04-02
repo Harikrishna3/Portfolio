@@ -391,72 +391,23 @@ const ProjectsPage = () => {
           ))}
         </Stack>
 
-        {/* Call to Action */}
-        <Fade in={mounted} timeout={1000} style={{ transitionDelay: "800ms" }}>
-          <Box sx={{ mt: 10, textAlign: "center" }}>
-            <Paper
-              sx={{
-                background: "#1E293B", // Using theme's paper color
-                backdropFilter: "blur(20px)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: 2.5,
-                p: 6,
-              }}
-            >
-              <Typography
-                variant="h4"
-                sx={{ color: "#FFFFFF", fontWeight: 700, mb: 2 }}
-              >
-                Interested in collaborating?
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "#E2E8F0",
-                  maxWidth: "500px",
-                  mx: "auto",
-                  mb: 4,
-                  fontSize: "1.1rem",
-                }}
-              >
-                I'm always excited to work on innovative projects and bring
-                creative ideas to life.
-              </Typography>
-              <Button
-                variant="contained"
-                size="large"
-                sx={{
-                  borderRadius: 2.5,
-                  padding: "12px 32px",
-                  fontWeight: 600,
-                  textTransform: "none",
-                  background:
-                    "linear-gradient(135deg, #1E3A8A 0%, #38BDF8 100%)",
-                  "&:hover": {
-                    background:
-                      "linear-gradient(135deg, #1e40af 0%, #0ea5e9 100%)",
-                    transform: "translateY(-2px)",
-                    boxShadow: "0 10px 25px rgba(30, 58, 138, 0.4)",
-                  },
-                }}
-              >
-                Get In Touch
-              </Button>
-               <Typography
-              // variant="h5"
+        {/* Footer Blog Info Instead of Large CTA */}
+        <Fade in={mounted} timeout={1000} style={{ transitionDelay: "600ms" }}>
+           <Typography
               sx={{
                 color: "#E2E8F0",
                 maxWidth: "600px",
                 mx: "auto",
-                mt: 6,
+                mt: 12,
+                mb: 4,
+                textAlign: "center",
                 lineHeight: 1.6,
-                fontSize: "0.9rem"
+                fontSize: "1.1rem",
+                opacity: 0.8
               }}
             >
-              Along with creating projects, I document and share my journey through blogs on  <span onClick={()=>{window.open("https://medium.com/@harikrishnabbomen","_blank")}} style={{ color: "#F59E0B", textDecoration: "underline Dotted", cursor: "pointer" }}>Medium &#8599;</span>
+              Along with building, I share my journey on <span onClick={()=>{window.open("https://medium.com/@harikrishnabbomen","_blank")}} style={{ color: "#F59E0B", textDecoration: "underline Dotted", cursor: "pointer", fontWeight: 600 }}>Medium &#8599;</span>
             </Typography>
-            </Paper>
-          </Box>
         </Fade>
       </Container>
     </Box>

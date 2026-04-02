@@ -18,16 +18,17 @@ const Home: React.FC = () => {
       >
        {window.innerWidth  > 1080 && <FloatingIcons />}
 
-        {/* Left side content */}
+        {/* Left side content - Now Full Width */}
         <Box
           sx={{
-            flex: { xs: "none", md: 1 },
-            order: { xs: 2, md: 1 },
+            flex: 1, // Full Width
+            order: 2,
             position: "relative",
             minHeight: { xs: "auto", md: "100vh" },
             overflow: "hidden",
             display: "flex",
             alignItems: "center",
+            justifyContent: "center", // Center for minimal look
             px: { 
               xs: 2,
               sm: 3,
@@ -35,7 +36,7 @@ const Home: React.FC = () => {
               lg: 8,
               xl: 12 
             },
-            py: { xs: 3, md: 0 },
+            py: { xs: 8, md: 0 },
             zIndex: 10,
           }}
         >

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -22,9 +22,12 @@ const navItems = [
   { label: "Contact", path: "contact" },
 ];
 
-export default function Navbar() {
+interface NavbarProps {
+  activeSection: string;
+}
+
+export default function Navbar({ activeSection }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
   const theme = useTheme();
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
@@ -45,31 +48,6 @@ export default function Navbar() {
     }
     setMobileOpen(false);
   };
-
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "-20% 0px -80% 0px",
-      threshold: 0
-    };
-
-    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersect, observerOptions);
-    const sections = ["home", "experience", "projects", "contact"];
-    sections.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) observer.observe(element);
-    });
-
-    return () => observer.disconnect();
-  }, []);
 
   const isActive = (path: string) => activeSection === path;
 
