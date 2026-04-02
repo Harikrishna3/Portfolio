@@ -3,12 +3,25 @@ import type { Theme, SxProps } from "@mui/material";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { textVariant } from "../utils/animations";
-import { useNavigate } from "react-router-dom";
 
 const MotionDiv = motion.div;
 
 export default function HeroText() {
-  const navigate = useNavigate();
+  const handleHireMe = () => {
+    const element = document.getElementById("contact");
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
 
   const boxSx: SxProps<Theme> = {
     display: "flex",
@@ -155,7 +168,7 @@ export default function HeroText() {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => navigate("/contact")}
+            onClick={handleHireMe}
             sx={buttonSx}
           >
             Hire Me

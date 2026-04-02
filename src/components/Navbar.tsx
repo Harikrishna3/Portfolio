@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -17,29 +16,62 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 
 const navItems = [
-  { label: "Home", path: "/" },
-  { label: "Experience", path: "/experience" },
-  { label: "Projects", path: "/projects" },
-  { label: "Contact", path: "/contact" },
-  // { label: "Code Dharma", path: "/code-dharma" }
+  { label: "Home", path: "home" },
+  { label: "Experience", path: "experience" },
+  { label: "Projects", path: "projects" },
+  { label: "Contact", path: "contact" },
 ];
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [activeSection, setActiveSection] = useState("home");
   const theme = useTheme();
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
-  const handleNavigation = (path: string) => {
-    navigate(path);
-    setMobileOpen(false); // Close mobile drawer after navigation
+  const handleNavigation = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+    setMobileOpen(false);
   };
 
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -80% 0px",
+      threshold: 0
+    };
+
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+    const sections = ["home", "experience", "projects", "contact"];
+    sections.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const isActive = (path: string) => activeSection === path;
 
   const drawer = (
     <Box
@@ -59,7 +91,7 @@ export default function Navbar() {
           color: theme.palette.text.primary,
           cursor: "pointer"
         }}
-        onClick={() => handleNavigation("/")}
+        onClick={() => handleNavigation("home")}
       >
         HK
       </Typography>
@@ -114,7 +146,7 @@ export default function Navbar() {
       }}>
         <Typography
           variant="h6"
-          onClick={() => handleNavigation("/")}
+          onClick={() => handleNavigation("home")}
           sx={{
             flexGrow: 1,
             fontFamily: "'Poppins', sans-serif",
@@ -207,4 +239,4 @@ export default function Navbar() {
       </Drawer>
     </AppBar>
   );
-}
+}

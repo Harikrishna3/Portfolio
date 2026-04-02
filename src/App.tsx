@@ -1,12 +1,12 @@
-import { Route, BrowserRouter, Routes } from "react-router-dom";
 import "./App.css";
+import { BrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Experience from "./pages/Experience";
 import Stars from "./components/Stars";
 import ProjectsPage from "./pages/ProjectsPage";
 import ContactPage from "./pages/ContactPage";
-// import CodeDharmaPage from "./pages/CodeDharma";
+import { Box } from "@mui/material";
 
 function App() {
   return (
@@ -29,13 +29,20 @@ function App() {
         }}
       />
       <Stars />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/experience" element={<Experience />} />
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        {/* <Route path="/code-dharma" element={<CodeDharmaPage />} /> */}
-      </Routes>
+      <Box component="main">
+        <section id="home">
+          <Home />
+        </section>
+        <section id="experience">
+          <Experience />
+        </section>
+        <section id="projects">
+          <ProjectsPage />
+        </section>
+        <section id="contact">
+          <ContactPage />
+        </section>
+      </Box>
     </BrowserRouter>
   );
 }
