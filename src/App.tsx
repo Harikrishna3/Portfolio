@@ -7,10 +7,34 @@ import Stars from "./components/Stars";
 import ProjectsPage from "./pages/ProjectsPage";
 import ContactPage from "./pages/ContactPage";
 import { Box } from "@mui/material";
+import { ScrollReveal } from "./components/ScrollReveal";
+import { motion, useScroll, useSpring } from "framer-motion";
 
 function App() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   return (
     <BrowserRouter>
+      {/* Scroll Progress Bar */}
+      <motion.div
+        style={{
+          scaleX,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 4,
+          background: "linear-gradient(90deg, #FACC15, #38BDF8)",
+          transformOrigin: "0%",
+          zIndex: 2000
+        }}
+      />
+
       <Navbar />
       {/* Background grid */}
       <div
@@ -31,16 +55,27 @@ function App() {
       <Stars />
       <Box component="main">
         <section id="home">
-          <Home />
+          <ScrollReveal>
+            <Home />
+          </ScrollReveal>
         </section>
+
         <section id="experience">
-          <Experience />
+          <ScrollReveal>
+             <Experience />
+          </ScrollReveal>
         </section>
+
         <section id="projects">
-          <ProjectsPage />
+          <ScrollReveal>
+             <ProjectsPage />
+          </ScrollReveal>
         </section>
+
         <section id="contact">
-          <ContactPage />
+          <ScrollReveal>
+             <ContactPage />
+          </ScrollReveal>
         </section>
       </Box>
     </BrowserRouter>
