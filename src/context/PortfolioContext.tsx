@@ -1,38 +1,38 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import defaultData from "../../server/db.json";
 
 const API_URL = "/api/portfolio";
 
 interface PortfolioContextType {
   portfolioData: any;
   loading: boolean;
-  refreshData: () => void;
+  setPortfolioData: (data: any) => void;
 }
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
 export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [portfolioData, setPortfolioData] = useState<any>(null);
+  const [portfolioData, setPortfolioData] = useState<any>(defaultData);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      setPortfolioData(data);
-      setLoading(false);
-    } catch (err) {
-      console.error("Failed to fetch live data:", err);
-      // We don't set loading to false here to keep showing a "Loading/Offline" state 
-      // or we could fallback to local constants here if needed.
-    }
-  };
-
   useEffect(() => {
-    fetchData();
+    fetch(API_URL)
+      .then((res) => {
+        if (!res.ok) throw new Error("Production mode: Using bundled static data");
+        return res.json();
+      })
+      .then((data) => {
+        setPortfolioData(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("Static Mode Active:", err.message);
+        setLoading(false); // We already have defaultData in state, so we just stop loading
+      });
   }, []);
 
   return (
-    <PortfolioContext.Provider value={{ portfolioData, loading, refreshData: fetchData }}>
+    <PortfolioContext.Provider value={{ portfolioData, loading, setPortfolioData }}>
       {children}
     </PortfolioContext.Provider>
   );
