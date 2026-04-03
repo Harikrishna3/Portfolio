@@ -12,7 +12,7 @@ export default defineConfig({
     {
       name: 'portfolio-backend-middleware',
       configureServer(server) {
-        server.middlewares.use((req, res, next) => {
+        server.middlewares.use((req: any, res: any, next: any) => {
           // 1. GET /api/portfolio
           if (req.url === '/api/portfolio' && req.method === 'GET') {
             const data = fs.readFileSync(DB_PATH, 'utf-8')
@@ -24,7 +24,7 @@ export default defineConfig({
           // 2. POST /api/portfolio
           if (req.url === '/api/portfolio' && req.method === 'POST') {
             let body = ''
-            req.on('data', chunk => { body += chunk })
+            req.on('data', (chunk: any) => { body += chunk })
             req.on('end', () => {
               fs.writeFileSync(DB_PATH, body, 'utf-8')
               res.setHeader('Content-Type', 'application/json')
@@ -36,7 +36,7 @@ export default defineConfig({
           // 3. POST /api/login
           if (req.url === '/api/login' && req.method === 'POST') {
             let body = ''
-            req.on('data', chunk => { body += chunk })
+            req.on('data', (chunk: any) => { body += chunk })
             req.on('end', () => {
               const { password } = JSON.parse(body)
               if (password === 'admin123') {
