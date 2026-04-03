@@ -142,36 +142,63 @@ const Admin = () => {
     setIsDialogOpen(false);
   };
 
+  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+
   if (!isAuthenticated) {
     return (
       <Container maxWidth="sm" sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
         <Paper elevation={24} sx={{ p: 4, width: "100%", background: "#1E293B", borderRadius: 3, border: "1px solid #334155" }}>
           <Typography variant="h4" sx={{ color: "white", mb: 3, fontWeight: 700, textAlign: "center" }}>
-            Live Portal 🔐
+            Admin Portal 🔐
           </Typography>
-          <TextField
-            fullWidth
-            type="password"
-            label="Admin Password"
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            sx={{
-              mb: 3,
-              "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "#334155" } },
-              "& .MuiInputLabel-root": { color: "#94A3B8" }
-            }}
-          />
-          <Button 
-            fullWidth 
-            variant="contained" 
-            onClick={handleLogin}
-            sx={{ py: 1.5, background: "linear-gradient(135deg, #3b82f6, #2563eb)", fontWeight: 600 }}
-          >
-            Connect to Backend
-          </Button>
+
+          {!isLocal ? (
+            <Stack spacing={3}>
+               <Typography variant="body1" sx={{ color: "#94A3B8", textAlign: "center", lineHeight: 1.6 }}>
+                 This live site is a <b>Static Build</b>. For security and performance, administrative edits are handled through your local development environment.
+               </Typography>
+               <Box sx={{ p: 2, background: "rgba(0,0,0,0.2)", borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ color: "#FACC15", mb: 1 }}>🚀 How to update this site:</Typography>
+                  <Typography variant="body2" sx={{ color: "white", mb: 0.5 }}>1. Run <code>npm run dev</code> on your local machine.</Typography>
+                  <Typography variant="body2" sx={{ color: "white", mb: 0.5 }}>2. Edit your data at <code>localhost:5173/admin</code>.</Typography>
+                  <Typography variant="body2" sx={{ color: "white", mb: 0.5 }}>3. Commit and Push your changes to GitHub.</Typography>
+               </Box>
+               <Button 
+                fullWidth 
+                variant="outlined" 
+                onClick={() => window.open(portfolioData.links.github, "_blank")}
+                sx={{ color: "white", borderColor: "#334155" }}
+              >
+                View Repository on GitHub
+              </Button>
+            </Stack>
+          ) : (
+            <>
+              <TextField
+                fullWidth
+                type="password"
+                label="Admin Password"
+                variant="outlined"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                sx={{
+                  mb: 3,
+                  "& .MuiOutlinedInput-root": { color: "white", "& fieldset": { borderColor: "#334155" } },
+                  "& .MuiInputLabel-root": { color: "#94A3B8" }
+                }}
+              />
+              <Button 
+                fullWidth 
+                variant="contained" 
+                onClick={handleLogin}
+                sx={{ py: 1.5, background: "linear-gradient(135deg, #3b82f6, #2563eb)", fontWeight: 600 }}
+              >
+                Connect to Local Backend
+              </Button>
+            </>
+          )}
           <Typography variant="caption" sx={{ color: "#64748B", display: "block", mt: 2, textAlign: "center" }}>
-            Make sure the local server is running (Node server/server.js)
+            Powered by Integrated Vite API Engine
           </Typography>
         </Paper>
       </Container>
