@@ -3,10 +3,15 @@ import type { Theme, SxProps } from "@mui/material";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { textVariant } from "../utils/animations";
+import { usePortfolio } from "../context/PortfolioContext";
 
 const MotionDiv = motion.div;
 
 export default function HeroText() {
+  const { portfolioData, loading } = usePortfolio();
+
+  if (loading) return null;
+
   const handleHireMe = () => {
     const element = document.getElementById("contact");
     if (element) {
@@ -138,7 +143,7 @@ export default function HeroText() {
         variants={textVariant as Variants}
       >
         <Typography variant="h5" color="text.secondary" sx={typographyH5Sx}>
-          MERN & JavaScript Developer | Problem Solver | Learner
+          {portfolioData?.hero?.subtitle}
         </Typography>
         {/* <br/> */}
         <Typography color="text.secondary" sx={typographyH6Sx}>

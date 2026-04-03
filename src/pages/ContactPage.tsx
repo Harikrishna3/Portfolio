@@ -18,12 +18,14 @@ import BookIcon from '@mui/icons-material/Book';
 import { Email, LinkedIn, GitHub } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import { motion } from "framer-motion";
+import { usePortfolio } from "../context/PortfolioContext";
 import BlackMap from "../assets/BlankMap_World_simple.svg";
 
 const commandsList = ["hire harikrishna", "linkedin", "github"];
 
 const ContactPage = () => {
   const theme = useTheme();
+  const { portfolioData, loading } = usePortfolio();
 
   // States
   const [openDialog, setOpenDialog] = useState(false);
@@ -109,28 +111,32 @@ const ContactPage = () => {
     }
   }, [command.length, animateTyping]);
 
+  if (loading || !portfolioData) return null;
+
   const handleCommand = (e: React.KeyboardEvent) => {
     if (e.key !== "Enter") return;
 
     const cmd = command.toLowerCase().trim();
+    const links = portfolioData.links;
+
     switch (cmd) {
       case "hire harikrishna":
       case "hire":
-        window.location.href = "mailto:harikrishnabbomen@gmail.com";
+        window.location.href = `mailto:${links.email}`;
         break;
       case "linkedin":
-        window.open("https://www.linkedin.com/in/harikrishnabomen/", "_blank");
+        window.open(links.linkedin, "_blank");
         break;
       case "github":
       case "git":
-        window.open("https://github.com/Harikrishna3", "_blank");
+        window.open(links.github, "_blank");
         break;
       case "clear":
         setCommand("");
         return;
       default:
         setDialogContent(
-          `Unknown command: "${cmd}". Try: hire harikrishna, linkedin, github, or clear`
+          `Unknown command: "${cmd}". Try: hire, linkedin, github, or clear`
         );
         setOpenDialog(true);
     }
@@ -295,63 +301,29 @@ const ContactPage = () => {
                 label: "Email",
                 icon: <Email />,
                 variant: "contained" as "contained",
-                href: "mailto:harikrishnabbomen@gmail.com",
-                sx: {
-                  background: "#3b82f6",
-                  "&:hover": { 
-                    background: "#2563eb", 
-                    transform: "translateY(-2px)", 
-                    boxShadow: "0 10px 25px rgba(59, 130, 246, 0.4)" 
-                  },
-                },
+                href: `mailto:${portfolioData.links.email}`,
+                sx: { background: "#3b82f6", "&:hover": { background: "#2563eb" } },
               },
               {
                 label: "LinkedIn",
                 icon: <LinkedIn />,
                 variant: "outlined" as "outlined",
-                href: "https://www.linkedin.com/in/harikrishnabomen/",
-                sx: {
-                  borderColor: "#facc15",
-                  color: "#facc15",
-                  "&:hover": { 
-                    background: "#facc15", 
-                    color: "#0f172a", 
-                    transform: "translateY(-2px)", 
-                    boxShadow: "0 10px 25px rgba(250, 204, 21, 0.4)" 
-                  },
-                },
+                href: portfolioData.links.linkedin,
+                sx: { borderColor: "#facc15", color: "#facc15" },
               },
               {
                 label: "GitHub",
                 icon: <GitHub />,
                 variant: "outlined" as "outlined",
-                href: "https://github.com/Harikrishna3",
-                sx: {
-                  borderColor: "#facc15",
-                  color: "#facc15",
-                  "&:hover": { 
-                    background: "#facc15", 
-                    color: "#0f172a", 
-                    transform: "translateY(-2px)", 
-                    boxShadow: "0 10px 25px rgba(250, 204, 21, 0.4)" 
-                  },
-                },
+                href: portfolioData.links.github,
+                sx: { borderColor: "#facc15", color: "#facc15" },
               },
               {
                 label: "Medium",
                 icon: <BookIcon />,
                 variant: "outlined" as "outlined",
-                href: "https://medium.com/@harikrishnabbomen",
-                sx: {
-                  borderColor: "#facc15",
-                  color: "#facc15",
-                  "&:hover": { 
-                    background: "#facc15", 
-                    color: "#0f172a", 
-                    transform: "translateY(-2px)", 
-                    boxShadow: "0 10px 25px rgba(250, 204, 21, 0.4)" 
-                  },
-                },
+                href: portfolioData.links.medium,
+                sx: { borderColor: "#facc15", color: "#facc15" },
               },
             ].map((btn) => (
               <Button

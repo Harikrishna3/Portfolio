@@ -23,7 +23,7 @@ import {
 } from "recharts";
 import { Code, Database, Palette } from "lucide-react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { projectsData, skillsData, timelineData } from "../utils/constants";
+import { usePortfolio } from "../context/PortfolioContext";
 import LeetCodeIcon from "../assets/leetcode-icon.svg";
 import JSIcon from "../assets/JS.svg";
 import ReactIcon from "../assets/react.svg";
@@ -219,6 +219,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({ item, isLast }) => {
 
 // ------------------------- Main Dashboard -------------------------
 const ExperienceDashboard = () => {
+  const { portfolioData, loading } = usePortfolio();
   const [animatedValues, setAnimatedValues] = useState({});
 
   useEffect(() => {
@@ -228,6 +229,11 @@ const ExperienceDashboard = () => {
     );
     return () => clearTimeout(timer);
   }, []);
+
+  if (loading || !portfolioData) return null;
+  const experience = portfolioData.experience;
+  const skillsDataSummary = portfolioData.skills;
+  const projectsDataSummary = portfolioData.projects; // Using projects for bar chart
 
   // ------------------------- JSX -------------------------
   return (
@@ -378,7 +384,7 @@ const ExperienceDashboard = () => {
                 <ResponsiveContainer width="100%" height={250}>
                   <PieChart>
                     <Pie
-                      data={skillsData}
+                      data={skillsDataSummary}
                       cx="50%"
                       cy="50%"
                       labelLine={false}
@@ -388,7 +394,7 @@ const ExperienceDashboard = () => {
                       outerRadius={80}
                       dataKey="value"
                     >
-                      {skillsData.map((entry, index) => (
+                      {skillsDataSummary.map((entry: any, index: number) => (
                         <Cell key={index} fill={entry.color} />
                       ))}
                     </Pie>
@@ -396,7 +402,7 @@ const ExperienceDashboard = () => {
                   </PieChart>
                 </ResponsiveContainer>
                 <Box sx={{ mt: 2, display: "flex", flexWrap: "wrap", gap: 1 }}>
-                  {skillsData.map((skill, index) => (
+                  {skillsDataSummary.map((skill: any, index: number) => (
                     <Chip
                       key={index}
                       label={`${skill.name} ${skill.value}%`}
@@ -415,15 +421,15 @@ const ExperienceDashboard = () => {
             <Box sx={{ flex: 1 }}>
               <ChartCard title="Projects by Technology Stack" icon={Code}>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={projectsData}>
+                  <BarChart data={projectsDataSummary}>
                     <CartesianGrid
                       strokeDasharray="3 3"
                       stroke="rgba(255,255,255,0.1)"
                     />
                     <XAxis
-                      dataKey="stack"
+                      dataKey="title"
                       stroke="#E2E8F0"
-                      fontSize={12}
+                      fontSize={10}
                       angle={-45}
                       textAnchor="end"
                       height={80}
@@ -436,9 +442,9 @@ const ExperienceDashboard = () => {
                         borderRadius: 8,
                       }}
                     />
-                    <Bar dataKey="projects" radius={[4, 4, 0, 0]}>
-                      {projectsData.map((entry, index) => (
-                        <Cell key={index} fill={entry.color} />
+                    <Bar dataKey="title" radius={[4, 4, 0, 0]}>
+                      {projectsDataSummary.map((_: any, index: number) => (
+                        <Cell key={index} fill={"#38BDF8"} />
                       ))}
                     </Bar>
                   </BarChart>
@@ -451,11 +457,11 @@ const ExperienceDashboard = () => {
           <Box>
             <ChartCard title="Career Timeline" icon={Database}>
               <Box sx={{ mt: 3 }}>
-                {timelineData.map((item, index) => (
+                {experience.map((item: any, index: number) => (
                   <TimelineItem
                     key={item.id}
                     item={item}
-                    isLast={index === timelineData.length - 1}
+                    isLast={index === experience.length - 1}
                   />
                 ))}
               </Box>
