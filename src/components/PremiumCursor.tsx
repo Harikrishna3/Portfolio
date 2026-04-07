@@ -1,25 +1,26 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-// Final Crystal Clear Premium Cursor: No orbits, no stick. Just the glow and its magic trail.
 export const PremiumCursor = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const dotRef = useRef<HTMLDivElement>(null);
-    const mouse = useRef({ x: 0, y: 0 });
-    const pos = useRef({ x: 0, y: 0 });
-    const particles = useRef<any[]>([]);
-    const [isHovering, setIsHovering] = useState(false);
-    const [hoverColor, setHoverColor] = useState('#00d4ff');
 
-    const lastMouse = useRef({ x: 0, y: 0 });
-    const velocity = useRef(0);
+    // Actual mouse position
+    const mouse = useRef({ x: -200, y: -200 });
+    // Smoothly interpolated position (slightly behind mouse)
+    const pos = useRef({ x: -200, y: -200 });
 
-    const config = {
-        dotSize: 10,
-        dotColor: '#00d4ff',
-        accentColor: '#FFD700',
-        smoothness: 0.12,
-        maxParticles: 180,
-    };
+    // Trail history: array of {x, y} snapshots
+    const trail = useRef<{ x: number; y: number }[]>([]);
+
+    const isHoveringRef = useRef(false);
+    const hoverColorRef = useRef('#00d4ff');
+
+    // Burst particles on click
+    const bursts = useRef<{
+        x: number; y: number;
+        vx: number; vy: number;
+        size: number; life: number; color: string;
+    }[]>([]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -27,167 +28,158 @@ export const PremiumCursor = () => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
+        const TRAIL_LENGTH = 28;        // how many trail dots
+        const DOT_SIZE_START = 5;       // front of tail (biggest)
+        const SMOOTHNESS = 0.18;        // how quickly pos chases mouse
+        const ACCENT = '#FFD700';
+        const BASE = '#00d4ff';
+
         const resize = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         };
 
-        const handleMouseMove = (e: MouseEvent) => {
-            // Speed Calculation
-            const dx = e.clientX - lastMouse.current.x;
-            const dy = e.clientY - lastMouse.current.y;
-            velocity.current = Math.sqrt(dx * dx + dy * dy);
-            
-            lastMouse.current.x = e.clientX;
-            lastMouse.current.y = e.clientY;
-            
+        const onMouseMove = (e: MouseEvent) => {
             mouse.current.x = e.clientX;
             mouse.current.y = e.clientY;
 
             const target = e.target as HTMLElement;
-            const isClickable = target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button') || target.closest('a') || getComputedStyle(target).cursor === 'pointer';
-            
-            if (isClickable) {
-                setIsHovering(true);
-                setHoverColor(config.accentColor);
-            } else {
-                setIsHovering(false);
-                setHoverColor(config.dotColor);
+            const clickable =
+                target.tagName === 'BUTTON' || target.tagName === 'A' ||
+                !!target.closest('button') || !!target.closest('a') ||
+                getComputedStyle(target).cursor === 'pointer';
+            isHoveringRef.current = clickable;
+            hoverColorRef.current = clickable ? ACCENT : BASE;
+        };
+
+        const onMouseDown = () => {
+            // Burst 30 shimmer particles from current pos
+            for (let i = 0; i < 30; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 2;
+                bursts.current.push({
+                    x: pos.current.x,
+                    y: pos.current.y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: Math.random() * 4 + 2,
+                    life: 1,
+                    color: Math.random() > 0.5 ? ACCENT : BASE,
+                });
             }
         };
 
-        const handleClick = () => {
-            // Exploding Shimmer on Click
-            for (let i = 0; i < 35; i++) {
-                particles.current.push(new Particle(mouse.current.x, mouse.current.y, true));
-            }
-        };
+        let animId: number;
+        const animate = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.globalAlpha = 1;
+            ctx.shadowBlur = 0;
 
-        class Particle {
-            x: number;
-            y: number;
-            vx: number;
-            vy: number;
-            size: number;
-            life: number;
-            isBurst: boolean;
-            color: string;
-            decay: number;
+            // Smoothly chase the real mouse
+            pos.current.x += (mouse.current.x - pos.current.x) * SMOOTHNESS;
+            pos.current.y += (mouse.current.y - pos.current.y) * SMOOTHNESS;
 
-            constructor(x: number, y: number, isBurst = false) {
-                this.x = x;
-                this.y = y;
-                this.isBurst = isBurst;
-                // Burst goes in all directions, trail drifts slightly upward
-                this.vx = (Math.random() - 0.5) * (isBurst ? 16 : 2.5);
-                this.vy = (Math.random() - 0.5) * (isBurst ? 16 : 2.5) - (isBurst ? 0 : 0.6); 
-                this.size = Math.random() * (isBurst ? 6 : 3) + 1;
-                this.life = 1;
-                this.color = isBurst ? config.accentColor : (Math.random() > 0.6 ? config.dotColor : '#FFFFFF');
-                this.decay = Math.random() * 0.008 + 0.006; 
+            // Push current smooth position to trail
+            trail.current.push({ x: pos.current.x, y: pos.current.y });
+            if (trail.current.length > TRAIL_LENGTH) {
+                trail.current.shift();
             }
 
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.life -= this.decay;
-                if (this.size > 0.1) this.size -= 0.03;
-            }
+            // Draw tail: oldest = smallest/most transparent, newest = biggest/opaque
+            const len = trail.current.length;
+            for (let i = 0; i < len; i++) {
+                const t = i / (len - 1);           // 0 = oldest (tail end), 1 = newest (head)
+                const alpha = t * t;                // quadratic: very faint at tail end
+                const size = DOT_SIZE_START * t;    // smallest at tail end
 
-            draw() {
-                if (!ctx) return;
+                const color = hoverColorRef.current;
+
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.life;
-                ctx.fill();
-                
-                if (this.life > 0.5) {
-                    ctx.shadowBlur = 12;
-                    ctx.shadowColor = this.color;
+                ctx.arc(trail.current[i].x, trail.current[i].y, Math.max(size, 0.5), 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.globalAlpha = alpha;
+                if (t > 0.7) {
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = color;
                 } else {
                     ctx.shadowBlur = 0;
                 }
-            }
-        }
-
-        const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            pos.current.x += (mouse.current.x - pos.current.x) * config.smoothness;
-            pos.current.y += (mouse.current.y - pos.current.y) * config.smoothness;
-
-            // DYNAMIC DENSITY: Generate particles proportional to mouse speed
-            const particleCount = Math.floor(velocity.current / 4); 
-            for (let i = 0; i < Math.min(particleCount, 6); i++) {
-                // Shake position slightly for a more "magical" spray
-                const offset = (Math.random() - 0.5) * 5;
-                particles.current.push(new Particle(pos.current.x + offset, pos.current.y + offset));
+                ctx.fill();
             }
 
-            // Decay velocity so sparkles stop when mouse stops
-            velocity.current *= 0.9;
+            // Draw burst particles
+            ctx.shadowBlur = 8;
+            for (let i = bursts.current.length - 1; i >= 0; i--) {
+                const b = bursts.current[i];
+                b.x += b.vx;
+                b.y += b.vy;
+                b.vx *= 0.93;
+                b.vy *= 0.93;
+                b.life -= 0.025;
+                b.size *= 0.97;
 
-            for (let i = 0; i < particles.current.length; i++) {
-                particles.current[i].update();
-                particles.current[i].draw();
-                if (particles.current[i].life <= 0) {
-                    particles.current.splice(i, 1);
-                    i--;
-                }
+                if (b.life <= 0) { bursts.current.splice(i, 1); continue; }
+
+                ctx.beginPath();
+                ctx.arc(b.x, b.y, b.size, 0, Math.PI * 2);
+                ctx.fillStyle = b.color;
+                ctx.shadowColor = b.color;
+                ctx.globalAlpha = b.life;
+                ctx.fill();
             }
 
-            if (particles.current.length > config.maxParticles) particles.current.shift();
-
+            // Update the glowing dot element
             if (dotRef.current) {
-                // Focus: Just the glowing dot core
-                dotRef.current.style.transform = `translate3d(${pos.current.x - config.dotSize / 2}px, ${pos.current.y - config.dotSize / 2}px, 0) scale(${isHovering ? 1.5 : 1})`;
-                dotRef.current.style.backgroundColor = hoverColor;
-                dotRef.current.style.boxShadow = `0 0 25px ${hoverColor}, 0 0 50px ${hoverColor}44, 0 0 5px #FFFFFF`;
+                const color = hoverColorRef.current;
+                const scale = isHoveringRef.current ? 1.6 : 1;
+                dotRef.current.style.transform =
+                    `translate3d(${mouse.current.x - 6}px, ${mouse.current.y - 6}px, 0) scale(${scale})`;
+                dotRef.current.style.backgroundColor = color;
+                dotRef.current.style.boxShadow =
+                    `0 0 18px ${color}, 0 0 40px ${color}66, 0 0 4px #fff`;
             }
 
-            requestAnimationFrame(animate);
+            animId = requestAnimationFrame(animate);
         };
 
-        window.addEventListener('resize', resize);
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mousedown', handleClick);
         resize();
-        animate();
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mousedown', onMouseDown);
+        animId = requestAnimationFrame(animate);
 
         return () => {
+            cancelAnimationFrame(animId);
             window.removeEventListener('resize', resize);
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mousedown', handleClick);
+            window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('mousedown', onMouseDown);
         };
-    }, [isHovering, hoverColor]);
+    }, []);
 
     return (
         <>
             <style>{`
-                body { cursor: none !important; }
-                a, button { cursor: none !important; }
-                .cursor-core {
+                * { cursor: none !important; }
+                .cursor-dot {
                     position: fixed;
                     top: 0;
                     left: 0;
-                    width: 10px;
-                    height: 10px;
+                    width: 12px;
+                    height: 12px;
                     border-radius: 50%;
                     pointer-events: none;
                     z-index: 100000;
-                    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+                    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.08s ease;
+                    will-change: transform;
                 }
             `}</style>
-            <div className="cursor-core" ref={dotRef} />
+            <div className="cursor-dot" ref={dotRef} />
             <canvas
                 ref={canvasRef}
                 style={{
                     position: 'fixed',
                     top: 0,
                     left: 0,
-                    width: '100vw',
-                    height: '100vh',
                     pointerEvents: 'none',
                     zIndex: 99999,
                 }}

@@ -233,7 +233,13 @@ const ExperienceDashboard = () => {
   if (loading || !portfolioData) return null;
   const experience = portfolioData.experience;
   const skillsDataSummary = portfolioData.skills;
-  const projectsDataSummary = portfolioData.projects; // Using projects for bar chart
+  // Parse tech count from details.Tech string (e.g. "React, Redux, JavaScript, HTML/CSS")
+  const projectsDataSummary = (portfolioData.projects as any[]).map((p: any) => ({
+    ...p,
+    techCount: typeof p.details?.Tech === 'string'
+      ? p.details.Tech.split(',').map((t: string) => t.trim()).filter(Boolean).length
+      : 0,
+  }));
 
   // ------------------------- JSX -------------------------
   return (
@@ -389,7 +395,7 @@ const ExperienceDashboard = () => {
                       cy="50%"
                       labelLine={false}
                       label={({ name, percent }) =>
-                        `${name} ${(percent ? percent : 0 * 100).toFixed(0)}%`
+                        `${name} ${((percent ?? 0) * 100).toFixed(0)}%`
                       }
                       outerRadius={80}
                       dataKey="value"
@@ -442,9 +448,9 @@ const ExperienceDashboard = () => {
                         borderRadius: 8,
                       }}
                     />
-                    <Bar dataKey="title" radius={[4, 4, 0, 0]}>
+                    <Bar dataKey="techCount" name="Technologies" radius={[4, 4, 0, 0]}>
                       {projectsDataSummary.map((_: any, index: number) => (
-                        <Cell key={index} fill={"#38BDF8"} />
+                        <Cell key={index} fill={index % 2 === 0 ? "#38BDF8" : "#FACC15"} />
                       ))}
                     </Bar>
                   </BarChart>
